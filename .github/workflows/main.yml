@@ -32,8 +32,9 @@ jobs:
           path: test-results/results.txt
 
   deploy:
-    needs: test
-    runs-on: [self-hosted, linux, x64] # Ensure your self-hosted runner has these labels
+  needs: test
+  runs-on: ubuntu-latest  # ✅ Use GitHub-hosted runner
+
     steps:
       - name: Download test artifact
         uses: actions/download-artifact@v4
