@@ -1,33 +1,18 @@
-name: CI/CD Pipeline
+deploy:
+  needs: test
+  runs-on: ubuntu-latest  # Use GitHub-hosted runner
+  steps:
+    - name: Download test artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: test-results
 
-on:
-  push:
-    branches:
-      - main
+    - name: Show test results
+      run: cat test-results/results.txt
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: |
-          echo "No tests yet"
-
-  deploy:
-    needs: test
-    runs-on: [self-hosted, linux, x64]
-    steps:
-      - name: Deploy application
-        run: |
-          echo "Deployment completed."
+    - name: Deploy application
+      run: |
+        echo "Starting deployment..."
+        npm install
+        npm start &
+        echo "Deployment completed."
