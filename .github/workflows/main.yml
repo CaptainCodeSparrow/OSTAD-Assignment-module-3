@@ -33,7 +33,7 @@ jobs:
 
   deploy:
     needs: test
-    runs-on: [self-hosted, linux, x64]
+    runs-on: [self-hosted, linux, x64] # Ensure your self-hosted runner has these labels
     steps:
       - name: Download test artifact
         uses: actions/download-artifact@v4
@@ -41,7 +41,7 @@ jobs:
           name: test-results
 
       - name: Show test results
-        run: cat results.txt
+        run: cat test-results/results.txt
 
       - name: Deploy application
         run: |
