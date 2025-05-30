@@ -1,0 +1,50 @@
+name: CI/CD Pipeline for Node.js Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # You can use any Node.js version you need
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Upload test results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: ./test-results  # Adjust this to where your test results are stored
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download test results artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: test-results
+
+      - name: Display test results
+        run: cat test-results/*
+
+      - name: Deploy to self-hosted runner
+        run: |
+          echo "Deploying application to self-hosted runner..."
+          # Replace this with your actual deployment steps
