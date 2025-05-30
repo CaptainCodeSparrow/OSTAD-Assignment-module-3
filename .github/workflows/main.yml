@@ -30,3 +30,13 @@ jobs:
         with:
           name: test-results
           path: test-results/results.txt
+
+  deploy:
+    needs: test  # This makes sure deploy runs *after* test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy placeholder
+        run: echo "Deploying app..."  # Replace with real deployment commands
